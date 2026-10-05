@@ -1,160 +1,54 @@
-apiVersion: v1
-kind: Namespace
-metadata:
-  name: gpu-lab
----
-apiVersion: resource.k8s.io/v1
-kind: ResourceClaim
-metadata:
-  name: gpu-claim-1
-  namespace: gpu-lab
-spec:
-  devices:
-    requests:
-      - name: gpu
-        exactly:
-          deviceClassName: gpu.example.com
----
-apiVersion: resource.k8s.io/v1
-kind: ResourceClaim
-metadata:
-  name: gpu-claim-2
-  namespace: gpu-lab
-spec:
-  devices:
-    requests:
-      - name: gpu
-        exactly:
-          deviceClassName: gpu.example.com
----
-apiVersion: resource.k8s.io/v1
-kind: ResourceClaim
-metadata:
-  name: gpu-claim-3
-  namespace: gpu-lab
-spec:
-  devices:
-    requests:
-      - name: gpu
-        exactly:
-          deviceClassName: gpu.example.com
----
-apiVersion: resource.k8s.io/v1
-kind: ResourceClaim
-metadata:
-  name: gpu-claim-4
-  namespace: gpu-lab
-spec:
-  devices:
-    requests:
-      - name: gpu
-        exactly:
-          deviceClassName: gpu.example.com
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: gpu-workload-1
-  namespace: gpu-lab
-  labels:
-    app: gpu-workload
-spec:
-  containers:
-    - name: workload
-      image: ubuntu:24.04
-      command:
-        - bash
-        - -c
-      args:
-        - |
-          echo "Simulated GPU workload 1 started"
-          echo "DRA ResourceClaim: gpu-claim-1"
-          sleep 1800
-      resources:
-        claims:
-          - name: gpu
+# workloads.yaml
+# Namespace, ResourceClaims, and GPU workload Pods
+#
+# Write each resource described below. Every name must match exactly —
+# the evaluation script checks for these names specifically.
 
-  resourceClaims:
-    - name: gpu
-      resourceClaimName: gpu-claim-1
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: gpu-workload-2
-  namespace: gpu-lab
-  labels:
-    app: gpu-workload
-spec:
-  containers:
-    - name: workload
-      image: ubuntu:24.04
-      command:
-        - bash
-        - -c
-      args:
-        - |
-          echo "Simulated GPU workload 2 started"
-          echo "DRA ResourceClaim: gpu-claim-2"
-          sleep 1800
-      resources:
-        claims:
-          - name: gpu
+# ------------------------------------------------------------------
+# TODO 1 — Namespace
+#   Create a Namespace named: gpu-lab
+# ------------------------------------------------------------------
 
-  resourceClaims:
-    - name: gpu
-      resourceClaimName: gpu-claim-2
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: gpu-workload-3
-  namespace: gpu-lab
-  labels:
-    app: gpu-workload
-spec:
-  containers:
-    - name: workload
-      image: ubuntu:24.04
-      command:
-        - bash
-        - -c
-      args:
-        - |
-          echo "Simulated GPU workload 3 started"
-          echo "DRA ResourceClaim: gpu-claim-3"
-          sleep 1800
-      resources:
-        claims:
-          - name: gpu
 
-  resourceClaims:
-    - name: gpu
-      resourceClaimName: gpu-claim-3
----
-apiVersion: v1
-kind: Pod
-metadata:
-  name: gpu-workload-4
-  namespace: gpu-lab
-  labels:
-    app: gpu-workload
-spec:
-  containers:
-    - name: workload
-      image: ubuntu:24.04
-      command:
-        - bash
-        - -c
-      args:
-        - |
-          echo "Simulated GPU workload 4 started"
-          echo "DRA ResourceClaim: gpu-claim-4"
-          sleep 1800
-      resources:
-        claims:
-          - name: gpu
+# ------------------------------------------------------------------
+# TODO 2 — ResourceClaims
+#   Create 4 separate ResourceClaim objects, all in namespace: gpu-lab
+#     Names: gpu-claim-1, gpu-claim-2, gpu-claim-3, gpu-claim-4
+#
+#   Each ResourceClaim requests ONE device:
+#     spec.devices.requests:
+#       - name: gpu
+#         exactly.deviceClassName: gpu.example.com
+#
+#   (Claims 1-3 demonstrate normal allocation. Claim 4 is deliberately
+#    used later to demonstrate capacity exhaustion and quota enforcement.)
+# ------------------------------------------------------------------
 
-  resourceClaims:
-    - name: gpu
-      resourceClaimName: gpu-claim-4
+
+# ------------------------------------------------------------------
+# TODO 3 — Pods
+#   Create 4 separate Pod objects, all in namespace: gpu-lab
+#     Names: gpu-workload-1, gpu-workload-2, gpu-workload-3, gpu-workload-4
+#
+#   Each Pod:
+#     labels:
+#       app: gpu-workload
+#
+#     spec.containers: one container named "workload"
+#       image: ubuntu:24.04
+#       command: [bash, -c]
+#       args: a script that
+#         - echoes a message that the workload has started
+#         - echoes which ResourceClaim it is using (its matching gpu-claim-N)
+#         - sleeps for 1800 seconds
+#       resources.claims:
+#         - name: gpu
+#
+#     spec.resourceClaims:
+#       - name: gpu
+#         resourceClaimName: <the matching gpu-claim-N from TODO 2>
+#           gpu-workload-1 -> gpu-claim-1
+#           gpu-workload-2 -> gpu-claim-2
+#           gpu-workload-3 -> gpu-claim-3
+#           gpu-workload-4 -> gpu-claim-4
+# ------------------------------------------------------------------

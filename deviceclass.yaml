@@ -1,8 +1,14 @@
-apiVersion: resource.k8s.io/v1
-kind: DeviceClass
-metadata:
-  name: gpu.example.com
-spec:
-  selectors:
-    - cel:
-        expression: "device.driver == 'gpu.example.com'"
+# deviceclass.yaml
+# DeviceClass: defines the category of devices a ResourceClaim can request
+#
+# Write the resource described below. The name must match exactly —
+# the evaluation script checks for it specifically.
+
+# ------------------------------------------------------------------
+# TODO 1 — DeviceClass
+#   Create a cluster-scoped DeviceClass named: gpu.example.com
+#
+#   spec.selectors:
+#     Add one CEL selector whose expression matches devices where:
+#       device.driver == 'gpu.example.com'
+# ------------------------------------------------------------------

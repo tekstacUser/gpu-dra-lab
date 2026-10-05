@@ -1,9 +1,19 @@
-apiVersion: v1
-kind: ResourceQuota
-metadata:
-  name: gpu-lab-quota
-  namespace: gpu-lab
-spec:
-  hard:
-    pods: "4"
-    gpu.example.com.deviceclass.resource.k8s.io/devices: "4"
+# quota.yaml
+# ResourceQuota: caps how many pods and simulated GPU devices
+# the gpu-lab namespace can use
+#
+# Write the resource described below. The name must match exactly —
+# the evaluation script checks for it specifically.
+#
+# NOTE: In Task 13 of the lab, you will come back and raise both hard
+# limits below from 3 to 4 as part of the capacity-optimization step.
+
+# ------------------------------------------------------------------
+# TODO 1 — ResourceQuota
+#   Create a ResourceQuota named: gpu-lab-quota
+#   In namespace: gpu-lab
+#
+#   spec.hard:
+#     pods: "3"
+#     gpu.example.com.deviceclass.resource.k8s.io/devices: "3"
+# ------------------------------------------------------------------
